@@ -3,7 +3,7 @@ package com.sqadfour.storereview.dto;
 public class RatingRequestDto {
 	private Integer productId;
 	private Integer storeId;
-	private Integer rating;
+	private Integer ratingValue;
 	private String review;
 
 	public Integer getProductId() {
@@ -21,13 +21,11 @@ public class RatingRequestDto {
 	public void setStoreId(Integer storeId) {
 		this.storeId = storeId;
 	}
-
-	public Integer getRating() {
-		return rating;
+	public Integer getRatingValue() {
+		return ratingValue;
 	}
-
-	public void setRating(Integer rating) {
-		this.rating = rating;
+	public void setRatingValue(Integer ratingValue) {
+		this.ratingValue = ratingValue;
 	}
 
 	public String getReview() {

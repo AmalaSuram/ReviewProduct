@@ -36,7 +36,7 @@ public class ProductController {
 		
 		ProductSearchDto productSearchDto = productServiceImpl.searchProduct(productName);
 		logger.info(AppConstant.PRODUCT_SEARCH_SUCCESS);
-		return new ResponseEntity<ProductSearchDto>(productSearchDto, HttpStatus.OK);
+		return new ResponseEntity<>(productSearchDto, HttpStatus.OK);
 		
 	}
 	

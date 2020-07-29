@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new NullPointerException();
 		}
-		rating.setRating(ratingRequestDto.getRating());
+		rating.setRatingValue(ratingRequestDto.getRatingValue());
 		rating.setReview(ratingRequestDto.getReview());
 		rating.setUserId(userId);
 		if (ratingRequestDto.getProductId() != 0 && ratingRequestDto.getStoreId() != 0) {
@@ -165,8 +165,7 @@ public class UserServiceImpl implements UserService {
 			finalrating = finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_PRODUCT);
 			Optional<Product> products = productRepository.findById(ratingRequestDto.getProductId());
 			if (products.isPresent()) {
-				Product product = new Product();
-				product = products.get();
+				Product product = products.get();
 				product.setFinalProductRating(finalrating);
 				productRepository.save(product);
 			}
@@ -175,8 +174,7 @@ public class UserServiceImpl implements UserService {
 			finalrating= finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_STORE);
 			Optional<Store> stores = storeRepository.findById(ratingRequestDto.getStoreId());
 			if (stores.isPresent()) {
-				Store store = new Store();
-				store = stores.get();
+				Store store = stores.get();
 				store.setFinalProductRating(finalrating);
 				storeRepository.save(store);
 			}
@@ -215,8 +213,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public Float finalRating(Integer id, String type) {
-		List<Rating> ratings = new ArrayList<>();
+		List<Rating> ratings = null;
 		List<Integer> ratingSum = new ArrayList<>();
+		Integer totalSum = 0;
 		Float avgRating = null;
 		if (type.equalsIgnoreCase(AppConstant.TYPE_PRODUCT)) {
 			ratings = ratingRepository.findByProductId(id);
@@ -225,10 +224,12 @@ public class UserServiceImpl implements UserService {
 		}
 		if (!ratings.isEmpty()) {
 			ratings.forEach(e -> {
-				ratingSum.add(e.getRating());
+				ratingSum.add(e.getRatingValue());
 			});
 			Optional<Integer> totalrating = ratingSum.stream().reduce((a, b) -> a + b);
-			Integer totalSum = totalrating.get();
+			if(totalrating.isPresent()) {
+			 totalSum = totalrating.get();
+			}
 			Integer size= ratings.size();
 			avgRating = (float) totalSum/size;
 

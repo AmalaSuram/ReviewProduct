@@ -79,7 +79,7 @@ public class UserControllerTest {
 		Integer userId = 1;
 		RatingRequestDto ratingRequestDto = new RatingRequestDto();
 		ratingRequestDto.setProductId(1);
-		ratingRequestDto.setRating(3);
+		ratingRequestDto.setRatingValue(3);;
 		ratingRequestDto.setReview(AppConstant.EXCELLENT_PRODUCT);
 		ratingRequestDto.setStoreId(1);
 		ResponseDto responseDto = new ResponseDto();

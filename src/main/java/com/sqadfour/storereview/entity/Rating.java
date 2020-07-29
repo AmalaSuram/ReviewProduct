@@ -10,7 +10,7 @@ public class Rating {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer ratingId;
-	private Integer rating;
+	private Integer ratingValue;
 	private Integer storeId;
 	private Integer productId;
 	private Integer userId;
@@ -24,12 +24,12 @@ public class Rating {
 		this.ratingId = ratingId;
 	}
 
-	public Integer getRating() {
-		return rating;
+	public Integer getRatingValue() {
+		return ratingValue;
 	}
 
-	public void setRating(Integer rating) {
-		this.rating = rating;
+	public void setRatingValue(Integer ratingValue) {
+		this.ratingValue = ratingValue;
 	}
 
 	public Integer getStoreId() {

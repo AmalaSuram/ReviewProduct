@@ -173,12 +173,12 @@ public class UserServiceImplTest {
 		Integer userId = 1;
 		RatingRequestDto ratingRequestDto = new RatingRequestDto();
 		ratingRequestDto.setProductId(1);
-		ratingRequestDto.setRating(3);
+		ratingRequestDto.setRatingValue(3);
 		ratingRequestDto.setReview(AppConstant.EXCELLENT_PRODUCT);
 		ratingRequestDto.setStoreId(1);
 		Rating savedRating = new Rating();
 		savedRating.setProductId(1);
-		savedRating.setRating(3);
+		savedRating.setRatingValue(3);
 		savedRating.setReview(AppConstant.EXCELLENT_PRODUCT);
 		savedRating.setStoreId(1);
 		Float finalrating= null;

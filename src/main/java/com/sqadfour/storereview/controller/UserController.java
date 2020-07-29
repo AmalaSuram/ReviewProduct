@@ -11,13 +11,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
-import org.apache.commons.httpclient.HttpStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +22,9 @@ import com.sqadfour.storereview.dto.OrderRequestDto;
 import com.sqadfour.storereview.dto.RatingRequestDto;
 import com.sqadfour.storereview.dto.ResponseDto;
 import com.sqadfour.storereview.service.UserService;
+import com.sqadfour.storereview.constant.AppConstant;
+import com.sqadfour.storereview.dto.OrdersDto;
+import com.sqadfour.storereview.dto.OrdersResponceDto;
 
 /**
  * 
@@ -34,14 +32,6 @@ import com.sqadfour.storereview.service.UserService;
  *@since 29-07-2020
  *This class is to handle user request
  */
-
-
-import com.sqadfour.storereview.constant.AppConstant;
-import com.sqadfour.storereview.dto.OrdersDto;
-import com.sqadfour.storereview.dto.OrdersResponceDto;
-import com.sqadfour.storereview.exception.UserNotFoundException;
-import com.sqadfour.storereview.service.UserService;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -72,10 +62,10 @@ public class UserController {
 	}
 	
 	@PostMapping("/rating/{userId}")
-	public ResponseDto giveRating(@RequestBody RatingRequestDto ratingRequestDto,@PathVariable Integer userId) throws ParseException {
+	public ResponseDto giveRating(@RequestBody RatingRequestDto ratingRequestDto,@PathVariable Integer userId) {
 		logger.info("In userController in giveRating method");
 		ResponseDto responseDto = null;
-		if (userId != 0 && !ObjectUtils.isEmpty(ratingRequestDto) && ratingRequestDto.getRating() !=0) {
+		if (userId != 0 && !ObjectUtils.isEmpty(ratingRequestDto) && ratingRequestDto.getRatingValue() !=0) {
 			responseDto = userService.giveRating(ratingRequestDto, userId);
 		}else {
 			throw new NullPointerException();
