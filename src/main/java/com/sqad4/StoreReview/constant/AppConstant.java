@@ -33,5 +33,15 @@ public class AppConstant {
 	public static final String CAUSE = "Cause";
 
 	public static final String ERROR_MESSSAGE = "Error Message";
+	
+	public static final String EXCELLENT_PRODUCT = "Excellent Product";
+	public static final String LOCATION = "E-city";
+	public static final String STORE_NAME = "D-mart";
+	public static final String PRODUCT_NAME = "Flour";
+	public static final String RATING_SUCCESS = "Rating given Successfully";
+	public static final String TYPE_PRODUCT = "Product";
+	public static final String TYPE_STORE = "Store";
+	public static final String ORDER_DETAILS_SAVED = "All OrderDetails get saved in OrderDetails Table";
+	
 
 }
