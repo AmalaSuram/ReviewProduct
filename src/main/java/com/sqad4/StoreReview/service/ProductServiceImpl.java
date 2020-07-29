@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +22,16 @@ import com.sqad4.StoreReview.repository.ProductRepository;
 import com.sqad4.StoreReview.repository.ProductStoreMappingRepository;
 import com.sqad4.StoreReview.repository.StoreRepository;
 
+/**
+ * this class is use for serching product
+ * @author shraddha
+ *
+ */
 @Service
 public class ProductServiceImpl implements ProductService{
 
+	private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+	
 	@Autowired
 	ProductRepository productRepository;
 	
@@ -48,10 +57,8 @@ public class ProductServiceImpl implements ProductService{
 					ProductDto productDto = new ProductDto();
 					BeanUtils.copyProperties(product, productDto);
 					
-					System.out.println("Store ID "+productStoreMapping.getStoreId());
 					Optional<Store> store = storeRepository.findById(productStoreMapping.getStoreId());
-					System.out.println(store.get().getStoreName());
-					
+					logger.info("Store Name: "+store.get().getStoreName());
 					
 					productDto.setStoreName(store.get().getStoreName());
 					productDtolist.add(productDto);	
