@@ -67,4 +67,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
 
+	/**
+	 * to handle product Not found exception
+	 * @param ex
+	 * @param request
+	 * @return
+	 */
+	@ExceptionHandler(ProductNotFoundException.class)
+	public ResponseEntity<Object> productNotFoundException(ProductNotFoundException ex, WebRequest request) {
+		
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put(AppConstant.STATUS_CODE, AppConstant.STATUS_CODE_VALUE);
+		body.put(AppConstant.STATUS_MESSAGE, AppConstant.PRODUCT_NOT_FOUND_MESSAGE);
+		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+	}
 }
