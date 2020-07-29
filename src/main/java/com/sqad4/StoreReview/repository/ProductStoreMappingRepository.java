@@ -8,4 +8,6 @@ import com.sqad4.StoreReview.entity.ProductStoreMapping;
 @Repository
 public interface ProductStoreMappingRepository extends JpaRepository<ProductStoreMapping, Integer>{
 
+	ProductStoreMapping findByProductIdAndStoreId(Integer productId, Integer storeId);
+
 }
