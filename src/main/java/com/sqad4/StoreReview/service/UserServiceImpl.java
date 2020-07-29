@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService {
 			if (product.isPresent()) {
 				Double itemPrice = e.getQuantity() * product.get().getProductPrice();
 				totalPrices.add(itemPrice);
-				// totalOrderprice = totalOrderprice + itemPrice;
 			}
 		});
 		Optional<Double> totalOrderpriceDouble = totalPrices.stream().reduce((a, b) -> a + b);
@@ -113,14 +112,21 @@ public class UserServiceImpl implements UserService {
 					throw new NullPointerException();
 				}
 			});
-			logger.info("All OrderDetails get saved in OrderDetails Table");
+			logger.info(AppConstant.ORDER_DETAILS_SAVED);
 		}
 		return utilityService.responseDto(AppConstant.ORDER_SUCCESS + "with Order Id:" + ordered.getOrderId());
 	}
+	
+	/**
+	 * @author sweta
+	 * @since 29-07-2020
+	 * This methos is used to store users rating and update the final rating of product and Store
+	 */
 
 	@Transactional
 	@Override
 	public ResponseDto giveRating(RatingRequestDto ratingRequestDto, Integer userId) {
+		logger.info("In giveRating in User ServiceImpl");
 		Rating rating = new Rating();
 		Float finalrating = null;
 		List<Integer> orderIds = new ArrayList<>();
@@ -161,9 +167,9 @@ public class UserServiceImpl implements UserService {
 			throw new NullPointerException();
 		}
 		Rating savedRating = ratingRepository.save(rating);
+		logger.info(AppConstant.RATING_SUCCESS);
 		if (ratingRequestDto.getProductId() != 0) {
-			finalrating = finalRating(ratingRequestDto.getProductId(), "Product");
-			System.out.println("finalrating" + finalrating);
+			finalrating = finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_PRODUCT);
 			Optional<Product> products = productRepository.findById(ratingRequestDto.getProductId());
 			if (products.isPresent()) {
 				Product product = new Product();
@@ -173,7 +179,7 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		if (ratingRequestDto.getStoreId() != 0) {
-			finalrating = finalRating(ratingRequestDto.getProductId(), "Store");
+			finalrating= finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_STORE);
 			Optional<Store> stores = storeRepository.findById(ratingRequestDto.getStoreId());
 			if (stores.isPresent()) {
 				Store store = new Store();
@@ -182,7 +188,7 @@ public class UserServiceImpl implements UserService {
 				storeRepository.save(store);
 			}
 		}
-		return utilityService.responseDto(AppConstant.ORDER_SUCCESS + "with Rating Id:" + savedRating.getRatingId());
+		return utilityService.responseDto(AppConstant.RATING_SUCCESS + "with Rating Id:" + savedRating.getRatingId());
 	}
 
 	@Override
@@ -219,9 +225,8 @@ public class UserServiceImpl implements UserService {
 		List<Rating> ratings = new ArrayList<>();
 		List<Integer> ratingSum = new ArrayList<>();
 		Float avgRating = null;
-		if (type.equalsIgnoreCase("Product")) {
+		if (type.equalsIgnoreCase(AppConstant.TYPE_PRODUCT)) {
 			ratings = ratingRepository.findByProductId(id);
-			System.out.println("Size" + ratings.size());
 		} else {
 			ratings = ratingRepository.findByStoreId(id);
 		}
@@ -231,10 +236,9 @@ public class UserServiceImpl implements UserService {
 			});
 			Optional<Integer> totalrating = ratingSum.stream().reduce((a, b) -> a + b);
 			Integer totalSum = totalrating.get();
-			Integer size = ratings.size();
-			avgRating = (float) totalSum / size;
-			System.out.println("totalRating" + totalSum);
-			System.out.println("avgRating" + avgRating);
+			Integer size= ratings.size();
+			avgRating = (float) totalSum/size;
+
 		}
 		return avgRating;
 	}
