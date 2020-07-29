@@ -10,6 +10,11 @@ import com.sqad4.StoreReview.entity.Orders;
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Integer>{
 
+
 	List<Orders> findByUserId(Integer userId);
+
+
+	List<Orders> findAllByUserId(Integer userId);
+
 
 }

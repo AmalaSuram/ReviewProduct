@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-
+import java.time.LocalDate;
 import org.springframework.util.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.sqad4.StoreReview.constant.AppConstant;
 import com.sqad4.StoreReview.controller.UserController;
 import com.sqad4.StoreReview.dto.OrderRequestDto;
+import com.sqad4.StoreReview.dto.OrdersDto;
 import com.sqad4.StoreReview.dto.RatingRequestDto;
 import com.sqad4.StoreReview.dto.ResponseDto;
 import com.sqad4.StoreReview.entity.Orders;
@@ -54,6 +55,13 @@ public class UserServiceImpl implements UserService {
 	RatingRepository ratingRepository;
 	@Autowired
 	StoreRepository storeRepository;
+
+	@Autowired
+	OrdersRepository ordersRepository;
+
+	@Autowired
+	ProductRepository ProductRepository;
+	@Autowired
 
 	UtilityService utilityService = new UtilityService();
 	private static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -114,7 +122,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseDto giveRating(RatingRequestDto ratingRequestDto, Integer userId) {
 		Rating rating = new Rating();
-		Float finalrating= null;
+		Float finalrating = null;
 		List<Integer> orderIds = new ArrayList<>();
 		List<Orders> orders = orderRepository.findByUserId(userId);
 		if (!orders.isEmpty()) {
@@ -155,19 +163,19 @@ public class UserServiceImpl implements UserService {
 		Rating savedRating = ratingRepository.save(rating);
 		if (ratingRequestDto.getProductId() != 0) {
 			finalrating = finalRating(ratingRequestDto.getProductId(), "Product");
-			System.out.println("finalrating"+finalrating);
+			System.out.println("finalrating" + finalrating);
 			Optional<Product> products = productRepository.findById(ratingRequestDto.getProductId());
-			if(products.isPresent()) {
+			if (products.isPresent()) {
 				Product product = new Product();
 				product = products.get();
 				product.setFinalProductRating(finalrating);
 				productRepository.save(product);
 			}
-		} 
+		}
 		if (ratingRequestDto.getStoreId() != 0) {
-			finalrating= finalRating(ratingRequestDto.getProductId(), "Store");
+			finalrating = finalRating(ratingRequestDto.getProductId(), "Store");
 			Optional<Store> stores = storeRepository.findById(ratingRequestDto.getStoreId());
-			if(stores.isPresent()) {
+			if (stores.isPresent()) {
 				Store store = new Store();
 				store = stores.get();
 				store.setFinalProductRating(finalrating);
@@ -177,13 +185,43 @@ public class UserServiceImpl implements UserService {
 		return utilityService.responseDto(AppConstant.ORDER_SUCCESS + "with Rating Id:" + savedRating.getRatingId());
 	}
 
+	@Override
+	public List<OrdersDto> getOrders(Integer userId) {
+
+		List<OrdersDto> orderDtolist = new ArrayList<>();
+
+		List<Orders> orders = ordersRepository.findAllByUserId(userId);
+
+		for (Orders ordersEntity : orders) {
+
+			List<OrdersDetails> orderDetails = ordersDetailsRepository.findByOrderId(ordersEntity.getOrderId());
+			for (OrdersDetails ordersDetailEntity : orderDetails) {
+
+				Product product = ProductRepository.findByProductId(ordersDetailEntity.getProductId());
+				Store store = storeRepository.findByStoreId(ordersDetailEntity.getStoreId());
+				OrdersDto ordersDto = new OrdersDto();
+				ordersDto.setOrderDate(ordersEntity.getOrderDate());
+				ordersDto.setProductName(product.getProductName());
+				ordersDto.setStoreName(store.getStoreName());
+				ordersDto.setQuantity(ordersDetailEntity.getQuantity());
+				ordersDto.setTotalPrice(product.getProductPrice());
+				orderDtolist.add(ordersDto);
+
+			}
+
+		}
+
+		return orderDtolist;
+
+	}
+
 	public Float finalRating(Integer id, String type) {
 		List<Rating> ratings = new ArrayList<>();
 		List<Integer> ratingSum = new ArrayList<>();
 		Float avgRating = null;
 		if (type.equalsIgnoreCase("Product")) {
 			ratings = ratingRepository.findByProductId(id);
-			System.out.println("Size"+ratings.size());
+			System.out.println("Size" + ratings.size());
 		} else {
 			ratings = ratingRepository.findByStoreId(id);
 		}
@@ -193,10 +231,10 @@ public class UserServiceImpl implements UserService {
 			});
 			Optional<Integer> totalrating = ratingSum.stream().reduce((a, b) -> a + b);
 			Integer totalSum = totalrating.get();
-			Integer size= ratings.size();
-			avgRating = (float) totalSum/size;
-			System.out.println("totalRating"+totalSum);
-			System.out.println("avgRating"+avgRating);
+			Integer size = ratings.size();
+			avgRating = (float) totalSum / size;
+			System.out.println("totalRating" + totalSum);
+			System.out.println("avgRating" + avgRating);
 		}
 		return avgRating;
 	}

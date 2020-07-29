@@ -8,4 +8,6 @@ import com.sqad4.StoreReview.entity.Store;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Integer>{
 
+	Store findByStoreId(Integer storeId);
+
 }

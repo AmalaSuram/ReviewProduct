@@ -33,6 +33,7 @@ public class AppConstant {
 	public static final String CAUSE = "Cause";
 
 	public static final String ERROR_MESSSAGE = "Error Message";
+
 	
 	public static final String PRODUCT_SEARCH_SUCCESS = "Product Search Successfully";
 	
@@ -40,5 +41,8 @@ public class AppConstant {
 	public static final String USER_FOUND_PRODUCTS = "User found products";
 	
 	public static final String PRODUCT_NOT_FOUND_MESSAGE = "This Product is not available";
+
+	public static final Integer SUCCESS_STATUS_CODE = 200;
+
 
 }
