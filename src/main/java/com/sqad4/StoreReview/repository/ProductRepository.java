@@ -8,4 +8,6 @@ import com.sqad4.StoreReview.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer>{
 
+	Product findByProductId(Integer productId);
+
 }

@@ -33,5 +33,6 @@ public class AppConstant {
 	public static final String CAUSE = "Cause";
 
 	public static final String ERROR_MESSSAGE = "Error Message";
+	public static final Integer SUCCESS_STATUS_CODE = 200;
 
 }
