@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import org.springframework.util.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,11 +108,11 @@ public class UserServiceImpl implements UserService {
 		}
 		return utilityService.responseDto(AppConstant.ORDER_SUCCESS + "with Order Id:" + ordered.getOrderId());
 	}
-	
+
 	/**
 	 * @author sweta
-	 * @since 29-07-2020
-	 * This methos is used to store users rating and update the final rating of product and Store
+	 * @since 29-07-2020 This methos is used to store users rating and update the
+	 *        final rating of product and Store
 	 */
 
 	@Transactional
@@ -125,9 +124,7 @@ public class UserServiceImpl implements UserService {
 		List<Integer> orderIds = new ArrayList<>();
 		List<Orders> orders = orderRepository.findByUserId(userId);
 		if (!orders.isEmpty()) {
-			orders.stream().forEach(e -> {
-				orderIds.add(e.getOrderId());
-			});
+			orders.stream().forEach(e -> orderIds.add(e.getOrderId()));
 		} else {
 			throw new NullPointerException();
 		}
@@ -160,7 +157,9 @@ public class UserServiceImpl implements UserService {
 			throw new NullPointerException();
 		}
 		Rating savedRating = ratingRepository.save(rating);
+
 		logger.info(AppConstant.RATING_SUCCESS);
+
 		if (ratingRequestDto.getProductId() != 0) {
 			finalrating = finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_PRODUCT);
 			Optional<Product> products = productRepository.findById(ratingRequestDto.getProductId());
@@ -170,8 +169,10 @@ public class UserServiceImpl implements UserService {
 				productRepository.save(product);
 			}
 		}
+
 		if (ratingRequestDto.getStoreId() != 0) {
-			finalrating= finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_STORE);
+			finalrating = finalRating(ratingRequestDto.getProductId(), AppConstant.TYPE_STORE);
+			System.out.println("In Store if");
 			Optional<Store> stores = storeRepository.findById(ratingRequestDto.getStoreId());
 			if (stores.isPresent()) {
 				Store store = stores.get();
@@ -179,6 +180,7 @@ public class UserServiceImpl implements UserService {
 				storeRepository.save(store);
 			}
 		}
+
 		return utilityService.responseDto(AppConstant.RATING_SUCCESS + "with Rating Id:" + savedRating.getRatingId());
 	}
 
@@ -213,7 +215,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public Float finalRating(Integer id, String type) {
-		List<Rating> ratings = null;
+		List<Rating> ratings = new ArrayList<>();
 		List<Integer> ratingSum = new ArrayList<>();
 		Integer totalSum = 0;
 		Float avgRating = null;
@@ -227,11 +229,11 @@ public class UserServiceImpl implements UserService {
 				ratingSum.add(e.getRatingValue());
 			});
 			Optional<Integer> totalrating = ratingSum.stream().reduce((a, b) -> a + b);
-			if(totalrating.isPresent()) {
-			 totalSum = totalrating.get();
+			if (totalrating.isPresent()) {
+				totalSum = totalrating.get();
 			}
-			Integer size= ratings.size();
-			avgRating = (float) totalSum/size;
+			Integer size = ratings.size();
+			avgRating = (float) totalSum / size;
 
 		}
 		return avgRating;

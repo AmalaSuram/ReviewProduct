@@ -2,6 +2,11 @@ package com.sqadfour.storereview.constant;
 
 public class AppConstant {
 	
+	
+	public AppConstant() {
+		super();
+	}
+
 	public static final String SUCCESS_STATUS_MESSAGE = "Success";
 
 	public static final String TRANSACTION_ERROR_MESSAGE = "Order not placed";

@@ -46,21 +46,22 @@ public class ProductServiceImpl implements ProductService{
 		ProductSearchDto productSearchDto = new ProductSearchDto(); 
 		ResponseDto responseDto = new ResponseDto();
 		List<ProductDto> productDtolist = new ArrayList<>();
-		List<Product> ProductList = productRepository.findByProductNameContainsOrderByFinalProductRatingDesc(productName);
-		if(!ProductList.isEmpty()){
-			for (Product product : ProductList) {
+		List<Product> productList = productRepository.findByProductNameContainsOrderByFinalProductRatingDesc(productName);
+		if(!productList.isEmpty()){
+			for (Product product : productList) {
 				
-				List<ProductStoreMapping> StoreList = productStoreMappingRepository.findByProductId(product.getProductId());
+				List<ProductStoreMapping> storeList = productStoreMappingRepository.findByProductId(product.getProductId());
 			
-				for (ProductStoreMapping productStoreMapping : StoreList) {
+				for (ProductStoreMapping productStoreMapping : storeList) {
 					
 					ProductDto productDto = new ProductDto();
 					BeanUtils.copyProperties(product, productDto);
 					
 					Optional<Store> store = storeRepository.findById(productStoreMapping.getStoreId());
-					logger.info("Store Name: "+store.get().getStoreName());
-					
-					productDto.setStoreName(store.get().getStoreName());
+					if(store.isPresent()) {
+						logger.info("Store Name: "+store.get().getStoreName());
+						productDto.setStoreName(store.get().getStoreName());
+					}
 					productDtolist.add(productDto);	
 				}
 				

@@ -6,7 +6,7 @@ package com.sqadfour.storereview.exception;
  */
 public class ProductNotFoundException extends RuntimeException{
 
-	public ProductNotFoundException(String productName) {
-		super(String.format("Product with  name %d not found", productName));
-	}
+    public ProductNotFoundException(String productName) {
+        super(String.format("Product "+productName+" not found"));
+    }
 }
