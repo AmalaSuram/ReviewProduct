@@ -58,9 +58,10 @@ public class ProductServiceImpl implements ProductService{
 					BeanUtils.copyProperties(product, productDto);
 					
 					Optional<Store> store = storeRepository.findById(productStoreMapping.getStoreId());
-					if(store.isPresent()) {
-						logger.info("Store Name: "+store.get().getStoreName());
+					
+					if(store.isPresent()){
 						productDto.setStoreName(store.get().getStoreName());
+						logger.info("Store Name: "+store.get().getStoreName());
 					}
 					productDtolist.add(productDto);	
 				}
